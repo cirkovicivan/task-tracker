@@ -62,6 +62,18 @@ def list():
     print(data)
 
 
+def mark_done(task_id):
+    with open(file, "r") as f:
+        data = json.load(f)
+
+    for task in data:
+        if task["id"] == int(task_id):
+            task["status"] = "done"
+
+    with open(file, "w") as f:
+        json.dump(data, f, indent=4)
+
+
 if __name__ == '__main__':
 
     function = sys.argv[1] if len(sys.argv) > 1 else ""
@@ -77,3 +89,5 @@ if __name__ == '__main__':
             list()
         case "update":
             update_task(task_data, task_data1)
+        case "mark-done":
+            mark_done(task_data)
