@@ -41,6 +41,21 @@ def delete_task(task_id):
         json.dump(data, f, indent=4)
 
 
+def update_task(task_id, task_content):
+    if not task_id or not task_content:
+        raise Exception("Not valid format of command please type --help")
+
+    with open(file, "r") as f:
+        data = json.load(f)
+
+    for task in data:
+        if task["id"] == int(task_id):
+            task["description"] = task_content
+
+    with open(file, "w") as f:
+        json.dump(data, f, indent=4)
+
+
 def list():
     with open(file, "r") as f:
         data = json.load(f)
@@ -51,6 +66,7 @@ if __name__ == '__main__':
 
     function = sys.argv[1] if len(sys.argv) > 1 else ""
     task_data = sys.argv[2] if len(sys.argv) > 2 else ""
+    task_data1 = sys.argv[3] if len(sys.argv) > 3 else ""
 
     match function:
         case "add":
@@ -59,3 +75,5 @@ if __name__ == '__main__':
             delete_task(task_data)
         case "list":
             list()
+        case "update":
+            update_task(task_data, task_data1)
