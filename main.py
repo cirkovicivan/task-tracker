@@ -1,6 +1,7 @@
 import sys
 import json
 from pathlib import Path
+from datetime import datetime
 
 file = Path("data.json")
 
@@ -16,14 +17,16 @@ def add_task(task_name):
 
     content = {
         "id": next_id,
-        "name": task_name,
-        "status": "in progress"
+        "description": task_name,
+        "status": "in progress",
+        "created_at": datetime.now().isoformat(),
+        "updated_at": ""
     }
 
     data.append(content)
 
     with open("data.json", "w") as f:
-        json.dump(content, f, indent=4)
+        json.dump(data, f, indent=4)
 
 
 def delete_task(task_id):
@@ -38,11 +41,21 @@ def delete_task(task_id):
         json.dump(data, f, indent=4)
 
 
+def list():
+    with open(file, "r") as f:
+        data = json.load(f)
+    print(data)
+
+
 if __name__ == '__main__':
-    _, function, task_data = sys.argv
+
+    function = sys.argv[1] if len(sys.argv) > 1 else ""
+    task_data = sys.argv[2] if len(sys.argv) > 2 else ""
 
     match function:
         case "add":
             add_task(task_data)
         case "delete":
             delete_task(task_data)
+        case "list":
+            list()
