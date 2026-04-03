@@ -18,7 +18,7 @@ def add_task(task_name):
     content = {
         "id": next_id,
         "description": task_name,
-        "status": "in progress",
+        "status": "todo",
         "created_at": datetime.now().isoformat(),
         "updated_at": ""
     }
@@ -57,10 +57,24 @@ def update_task(task_id, task_content):
         json.dump(data, f, indent=4)
 
 
-def list():
+def list_tasks(type):
     with open(file, "r") as f:
-        data = json.load(f)
-    print(data)
+        tasks = json.load(f)
+
+    match type:
+        case "done":
+            filtered_tasks = [task for task in tasks if task["status"] == "done"]
+        case "todo":
+            filtered_tasks = [task for task in tasks if task["status"] == "todo"]
+        case "in-progress":
+            filtered_tasks = [task for task in tasks if task["status"] == "in progress"]
+        case _:
+            filtered_tasks = tasks
+
+    if not filtered_tasks:
+        print("There is no tasks with that status")
+    else:
+        print(filtered_tasks)
 
 
 def mark_done(task_id):
@@ -99,7 +113,7 @@ if __name__ == '__main__':
         case "delete":
             delete_task(task_data)
         case "list":
-            list()
+            list_tasks(task_data)
         case "update":
             update_task(task_data, task_data1)
         case "mark-done":
