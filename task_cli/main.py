@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-file = Path("data.json")
+file = Path(__file__).parent / "data.json"
 
 
 def add_task(task_name):
@@ -25,7 +25,7 @@ def add_task(task_name):
 
     data.append(content)
 
-    with open("data.json", "w") as f:
+    with open(file, "w") as f:
         json.dump(data, f, indent=4)
 
 
@@ -101,8 +101,7 @@ def mark_in_progress(task_id):
         json.dump(data, f, indent=4)
 
 
-if __name__ == '__main__':
-
+def main():
     function = sys.argv[1] if len(sys.argv) > 1 else ""
     task_data = sys.argv[2] if len(sys.argv) > 2 else ""
     task_data1 = sys.argv[3] if len(sys.argv) > 3 else ""
@@ -120,3 +119,9 @@ if __name__ == '__main__':
             mark_done(task_data)
         case "mark-in-progress":
             mark_in_progress(task_data)
+        case _:
+            print("That command does not exist, type help for more info.")
+
+
+if __name__ == '__main__':
+    main()
